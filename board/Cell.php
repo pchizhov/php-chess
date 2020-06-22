@@ -1,0 +1,45 @@
+<?php
+
+require_once 'pieces/ChessPiece.php';
+
+class Cell {
+
+    private array $position;
+    private ?PieceManager $piece;
+
+    public function __construct($position, PieceManager $piece_manager = null) {
+        $this->position = $position;
+        $this->piece = $piece_manager;
+    }
+
+    public function neighbour_exists(array $shift): bool {
+        $i = $this->position[0] + $shift[0];
+        $j = $this->position[1] + $shift[1];
+        return $i < 8 && $i >= 0 && $j < 8 && $j >= 0;
+    }
+
+    public function get_coordinates(): array {
+        return $this->position;
+    }
+
+    public function get_piece(): ?PieceManager {
+        return $this->piece;
+    }
+
+    public function set_piece(PieceManager $piece_manager): void {
+        $this->piece = $piece_manager;
+    }
+
+    public function remove_piece(): void {
+        $this->piece = null;
+    }
+
+    public function is_empty(): bool {
+        return $this->piece == null;
+    }
+
+    public function get_neighbour(array $shift): array {
+        return array($this->position[0] + $shift[0], $this->position[1] + $shift[1]);
+    }
+
+}

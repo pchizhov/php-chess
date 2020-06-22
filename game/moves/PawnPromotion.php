@@ -6,7 +6,7 @@ class PawnPromotion extends SimpleMove {
     private int $piece_type;
     private PieceManager $pawn;
 
-    public function __construct(Cell $from, Cell $to, int $piece_type) {
+    public function __construct(Cell &$from, Cell &$to, int $piece_type) {
         parent::__construct($from, $to);
         $this->piece_type = $piece_type;
     }

@@ -1,6 +1,7 @@
 <?php
 
 require_once 'Cell.php';
+require_once 'game/exceptions/NoSuchCellException.php';
 
 class ChessBoard {
 
@@ -17,6 +18,11 @@ class ChessBoard {
     }
 
     public function &get_cell(array $coordinates): Cell {
+        $i = $coordinates[0];
+        $j = $coordinates[1];
+        if ($i < 0 or $i > 7 or $j < 0 or $j > 7) {
+            throw new NoSuchCellException("cell with coordinates $i, $j does not exist");
+        }
         return $this->board[$coordinates[0]][$coordinates[1]];
     }
 

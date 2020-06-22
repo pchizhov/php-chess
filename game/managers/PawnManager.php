@@ -31,7 +31,7 @@ class PawnManager extends PieceManager {
         return $moves;
     }
 
-    private function get_promotions(Cell $from, Cell $to): array {
+    private function get_promotions(Cell &$from, Cell &$to): array {
         return [
             new PawnPromotion($from, $to, PieceEnum::BISHOP),
             new PawnPromotion($from, $to, PieceEnum::KNIGHT),

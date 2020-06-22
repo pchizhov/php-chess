@@ -83,9 +83,15 @@ class Game {
     }
 
     public static function select_cell(array $coordinates): array {
-        self::$selected_cell = self::$board->get_cell($coordinates);
-        return self::$selected_cell->get_piece()->get_color() == self::$current_player ?
-            self::$selected_cell->get_piece()->get_moves() : [];
+        try {
+            self::$selected_cell = self::$board->get_cell($coordinates);
+            return !self::$selected_cell->is_empty() &&
+                self::$selected_cell->get_piece()->get_color() == self::$current_player ?
+                self::$selected_cell->get_piece()->get_moves() : [];
+        } catch (NoSuchCellException $e) {
+            echo $e;
+            return [];
+        }
     }
 
     public static function move(Move &$move) {
@@ -110,9 +116,11 @@ class Game {
 
     public static function check_check(int $color = null): bool {
         foreach (self::$players[isset($color) ? $color : self::$current_player] as $piece) {
-            foreach ($piece->get_moves(false) as $move) {
-                if ($move->threatens_the_king()) {
-                    return true;
+            if ($piece->exists()) {
+                foreach ($piece->get_moves(false) as $move) {
+                    if ($move->threatens_the_king()) {
+                        return true;
+                    }
                 }
             }
         }
@@ -126,8 +134,10 @@ class Game {
     private static function get_all_moves(): array {
         $moves = [];
         foreach (self::$players[self::$current_player] as $piece) {
-            foreach ($piece->get_moves(false) as $move) {
-                array_push($moves, $move);
+            if ($piece->exists()) {
+                foreach ($piece->get_moves(false) as $move) {
+                    array_push($moves, $move);
+                }
             }
         }
         return $moves;

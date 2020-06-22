@@ -51,6 +51,10 @@ abstract class PieceManager {
         return $this->piece->is_a_king();
     }
 
+    public function exists(): bool {
+        return $this->exists;
+    }
+
     public function capture(): void {
         $this->exists = false;
     }

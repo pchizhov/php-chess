@@ -16,11 +16,11 @@ class ChessBoard {
         }
     }
 
-    public function get_cell(array $coordinates): Cell {
+    public function &get_cell(array $coordinates): Cell {
         return $this->board[$coordinates[0]][$coordinates[1]];
     }
 
-    public function get_neighbour(Cell $cell, array $shift): ?Cell {
+    public function get_neighbour(Cell &$cell, array $shift): ?Cell {
         return $cell->neighbour_exists($shift) ? $this->get_cell($cell->get_neighbour($shift)) : null;
     }
 

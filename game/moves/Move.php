@@ -6,7 +6,7 @@ abstract class Move {
     protected Cell $from;
     protected Cell $to;
 
-    public function __construct(Cell $from, Cell $to) {
+    public function __construct(Cell &$from, Cell &$to) {
         $this->from = $from;
         $this->to = $to;
     }

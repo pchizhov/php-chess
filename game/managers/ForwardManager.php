@@ -5,7 +5,7 @@ require_once 'PieceManager.php';
 
 class ForwardManager extends PieceManager {
 
-    public function get_moves(): array {
+    public function all_moves(): array {
         $moves = [];
         foreach ($this->piece->to_move() as $shift) {
             $current_cell = $this->cell;

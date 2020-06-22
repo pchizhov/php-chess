@@ -3,8 +3,8 @@
 
 class KingManager extends SimpleManager {
 
-    public function get_moves(): array {
-        $moves = parent::get_moves();
+    public function all_moves(): array {
+        $moves = parent::all_moves();
         if ($c = $this->check_castling()) {
             $moves = array_merge($moves, $c);
         }

@@ -5,7 +5,7 @@ require_once 'game/moves/SimpleMove.php';
 
 class PawnManager extends PieceManager {
 
-    public function get_moves(): array {
+    protected function all_moves(): array {
         $moves = [];
         foreach ($this->piece->to_move() as $shift) {
             if ($neighbour = Game::get_board()->get_neighbour($this->cell, $shift) and

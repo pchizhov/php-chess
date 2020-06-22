@@ -4,8 +4,8 @@ require_once 'PieceManager.php';
 
 class RookManager extends ForwardManager {
 
-    public function get_moves(): array {
-        $moves = parent::get_moves();
+    public function all_moves(): array {
+        $moves = parent::all_moves();
         if ($c = $this->check_castling()) {
             array_push($moves, $c);
         }

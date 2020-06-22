@@ -22,12 +22,13 @@ class Cell {
         return $this->position;
     }
 
-    public function get_piece(): ?PieceManager {
+    public function &get_piece(): ?PieceManager {
         return $this->piece;
     }
 
-    public function set_piece(PieceManager $piece_manager): void {
+    public function set_piece(PieceManager &$piece_manager): void {
         $this->piece = $piece_manager;
+        $this->piece->set_cell($this);
     }
 
     public function remove_piece(): void {

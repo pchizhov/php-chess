@@ -3,7 +3,7 @@
 
 class SimpleManager extends PieceManager {
 
-    public function get_moves(): array {
+    public function all_moves(): array {
         $shifts = $this->piece->to_move();
         $moves = [];
         foreach ($shifts as $shift) {

@@ -15,12 +15,12 @@ class SimpleMove extends Move {
     }
 
     public function undo(): void {
+        $this->from->set_piece($this->to->get_piece());
+        $this->to->remove_piece();
         if ($this->captured_piece) {
             $this->to->set_piece($this->captured_piece);
             $this->captured_piece->put_back();
         }
-        $this->from->set_piece($this->to->get_piece());
-        $this->to->remove_piece();
         $this->captured_piece = null;
     }
 

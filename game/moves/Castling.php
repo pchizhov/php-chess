@@ -5,7 +5,7 @@ class Castling extends SimpleMove {
 
     private SimpleMove $king_move;
 
-    public function __construct(Cell $from, Cell $to, Cell $king_from, Cell $king_to) {
+    public function __construct(Cell &$from, Cell &$to, Cell &$king_from, Cell &$king_to) {
         parent::__construct($from, $to);
         $this->king_move = new SimpleMove($king_from, $king_to);
     }

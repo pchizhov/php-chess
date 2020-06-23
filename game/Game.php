@@ -61,27 +61,27 @@ class Game {
         fclose($file);
     }
 
-    public static function create_piece(int $piece_type, int $color, array $pos): PieceManager {
+    public static function create_piece(int $piece_type, int $color, array $pos, bool $used = false): PieceManager {
         $cell = self::$board->get_cell($pos);
         $piece = null;
         switch ($piece_type) {
             case PieceEnum::PAWN:
-                $piece = new PawnManager(new Pawn($color), $cell);
+                $piece = new PawnManager(new Pawn($color, $used), $cell);
                 break;
             case PieceEnum::ROOK:
-                $piece = new RookManager(new Rook($color), $cell);
+                $piece = new RookManager(new Rook($color, $used), $cell);
                 break;
             case PieceEnum::KNIGHT:
-                $piece = new SimpleManager(new Knight($color), $cell);
+                $piece = new SimpleManager(new Knight($color, $used), $cell);
                 break;
             case PieceEnum::BISHOP:
-                $piece = new ForwardManager(new Bishop($color), $cell);
+                $piece = new ForwardManager(new Bishop($color, $used), $cell);
                 break;
             case PieceEnum::QUEEN:
-                $piece = new ForwardManager(new Queen($color), $cell);
+                $piece = new ForwardManager(new Queen($color, $used), $cell);
                 break;
             case PieceEnum::KING:
-                $piece = new KingManager(new King($color), $cell);
+                $piece = new KingManager(new King($color, $used), $cell);
                 break;
         }
         array_push(self::$players[$color], $piece);

@@ -52,6 +52,7 @@ class Cell {
             $result->piece = json_decode('{}');
             $result->piece->piece_type = $this->get_piece()->get_piece_type();
             $result->piece->color = $this->get_piece()->get_color();
+            $result->piece->used = $this->get_piece()->used();
         }
         return $result;
     }

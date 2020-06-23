@@ -6,9 +6,9 @@ abstract class ChessPiece {
     protected int $color;
     protected bool $used;
 
-    public function __construct(int $color) {
+    public function __construct(int $color, bool $used = false) {
         $this->color = $color;
-        $this->used = false;
+        $this->used = $used;
     }
 
     abstract function to_move(): array;

@@ -20,4 +20,26 @@ class Castling extends SimpleMove {
         $this->king_move->undo();
     }
 
+    public function get_king_from(): Cell {
+        return $this->king_move->get_from();
+    }
+
+    public function get_king_to(): Cell {
+        return $this->king_move->get_to();
+    }
+
+    public function get_type(): int {
+        return MoveEnum::CASTLING;
+    }
+
+    public function to_json() {
+        $result = json_decode('{}');
+        $result->rook_from = $this->from->get_coordinates();
+        $result->rook_to = $this->to->get_coordinates();
+        $result->king_from = $this->get_king_from()->get_coordinates();
+        $result->king_to = $this->get_king_to()->get_coordinates();
+        $result->type = MoveEnum::CASTLING;
+        return $result;
+    }
+
 }

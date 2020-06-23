@@ -21,8 +21,6 @@ class Game {
     private static ChessBoard $board;
     private static array $players;
     private static int $current_player;
-    private static ?Cell $selected_cell;
-    private static array $moves_history;
 
     public static function new_game() {
         self::$board = new ChessBoard();
@@ -30,8 +28,37 @@ class Game {
         self::put_pieces(0);
         self::put_pieces(1);
         self::$current_player = 1;
-        self::$selected_cell = null;
-        self::$moves_history = [];
+        self::save();
+    }
+
+    public static function game_from_file($filename = 'game.json') {
+        self::$players = [[], []];
+        $file_content = json_decode(file_get_contents($filename));
+        self::$board = new ChessBoard();
+        for ($i = 0; $i < 8; ++$i) {
+            for ($j = 0; $j < 8; ++$j) {
+                $cell = $file_content->board[$i][$j];
+                if (!$cell->empty) {
+                    self::create_piece($cell->piece->piece_type, $cell->piece->color, [$i, $j]);
+                }
+            }
+        }
+        self::$current_player = $file_content->current_player;
+    }
+
+    public static function save() {
+        $result = json_decode('{}');
+        $result->board = [[], [], [], [], [], [], [], []];
+        for ($i = 0; $i < 8; ++$i) {
+            for ($j = 0; $j < 8; ++$j) {
+                $cell = self::$board->get_cell([$i, $j])->to_json();
+                array_push($result->board[$i], $cell);
+            }
+        }
+        $result->current_player = self::$current_player;
+        $file = fopen('game.json', 'w');
+        fwrite($file, json_encode($result));
+        fclose($file);
     }
 
     public static function create_piece(int $piece_type, int $color, array $pos): PieceManager {
@@ -78,31 +105,45 @@ class Game {
         self::create_piece(PieceEnum::KING, $color, [$row['major'], 4]);
     }
 
+    public static function move_from_json($json_move): Move {
+        switch ($json_move->type) {
+            case MoveEnum::CASTLING:
+                $move = new Castling(
+                    Game::get_board()->get_cell($json_move->rook_from),
+                    Game::get_board()->get_cell($json_move->rook_to),
+                    Game::get_board()->get_cell($json_move->king_from),
+                    Game::get_board()->get_cell($json_move->king_to)
+                );
+                break;
+            case MoveEnum::PAWN_PROMOTION:
+                $move = new PawnPromotion(
+                    Game::get_board()->get_cell($json_move->from),
+                    Game::get_board()->get_cell($json_move->to),
+                    $json_move->new_piece
+                );
+                break;
+            default:
+                $move = new SimpleMove(
+                    Game::get_board()->get_cell($json_move->from),
+                    Game::get_board()->get_cell($json_move->to)
+                );
+        }
+        return $move;
+    }
+
     public static function &get_board(): ChessBoard {
         return self::$board;
     }
 
     public static function select_cell(array $coordinates): array {
-        try {
-            self::$selected_cell = self::$board->get_cell($coordinates);
-            return !self::$selected_cell->is_empty() &&
-                self::$selected_cell->get_piece()->get_color() == self::$current_player ?
-                self::$selected_cell->get_piece()->get_moves() : [];
-        } catch (NoSuchCellException $e) {
-            echo $e;
-            return [];
-        }
+        $selected_cell = self::$board->get_cell($coordinates);
+        return !$selected_cell->is_empty() &&
+            $selected_cell->get_piece()->get_color() == self::$current_player ?
+            $selected_cell->get_piece()->get_moves() : [];
     }
 
     public static function move(Move &$move) {
         $move->execute();
-        self::$selected_cell = null;
-        array_push(self::$moves_history, $move);
-        self::switch_player();
-    }
-
-    public static function one_step_back() {
-        array_pop(self::$moves_history)->undo();
         self::switch_player();
     }
 
@@ -111,11 +152,11 @@ class Game {
     }
 
     public static function get_opponent(int $color): int {
-        return 1 - self::$current_player;
+        return 1 - $color;
     }
 
-    public static function check_check(int $color = null): bool {
-        foreach (self::$players[isset($color) ? $color : self::$current_player] as $piece) {
+    public static function under_check(int $color = null): bool {
+        foreach (self::$players[self::get_opponent(isset($color) ? $color : self::$current_player)] as $piece) {
             if ($piece->exists()) {
                 foreach ($piece->get_moves(false) as $move) {
                     if ($move->threatens_the_king()) {
@@ -127,13 +168,13 @@ class Game {
         return false;
     }
 
-    public static function checkmate_check(): bool {
-        return self::check_check(self::get_opponent(self::$current_player)) and !self::get_all_moves();
+    public static function under_checkmate($color = null): bool {
+        return self::under_check($color) and !self::get_all_moves($color);
     }
 
-    private static function get_all_moves(): array {
+    private static function get_all_moves($color = null): array {
         $moves = [];
-        foreach (self::$players[self::$current_player] as $piece) {
+        foreach (self::$players[isset($color) ? $color : self::$current_player] as $piece) {
             if ($piece->exists()) {
                 foreach ($piece->get_moves(false) as $move) {
                     array_push($moves, $move);

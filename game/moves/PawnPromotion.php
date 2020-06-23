@@ -6,9 +6,12 @@ class PawnPromotion extends SimpleMove {
     private int $piece_type;
     private PieceManager $pawn;
 
-    public function __construct(Cell &$from, Cell &$to, int $piece_type) {
+    public function __construct(Cell &$from, Cell &$to, int $piece_type, PieceManager $pawn = null) {
         parent::__construct($from, $to);
         $this->piece_type = $piece_type;
+        if (isset($pawn)) {
+            $this->pawn = $pawn;
+        }
     }
 
     public function execute(): void {
@@ -24,4 +27,20 @@ class PawnPromotion extends SimpleMove {
         $this->pawn->put_back();
         parent::undo();
     }
+
+    public function get_type(): int {
+        return MoveEnum::PAWN_PROMOTION;
+    }
+
+    public function get_new_piece_type(): int {
+        return $this->piece_type;
+    }
+
+    public function to_json() {
+        $result = parent::to_json();
+        $result->new_piece = $this->piece_type;
+        $result->type = MoveEnum::PAWN_PROMOTION;
+        return $result;
+    }
+
 }

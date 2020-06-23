@@ -9,4 +9,8 @@ class Knight extends ChessPiece {
         return [[2, 1], [1, 2], [-2, 1], [-1, 2], [2, -1], [1, -2], [-2, -1], [-1, -2]];
     }
 
+    public function get_piece_type(): int {
+        return PieceEnum::KNIGHT;
+    }
+
 }

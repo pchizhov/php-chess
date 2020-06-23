@@ -30,7 +30,7 @@ abstract class PieceManager {
 
     private function check_move(Move &$move) {
         $move->execute();
-        $res = !Game::check_check(Game::get_opponent($this->get_color()));
+        $res = !Game::under_check($this->get_color());
         $move->undo();
         return $res;
     }
@@ -47,10 +47,6 @@ abstract class PieceManager {
         return $this->piece->used();
     }
 
-    public function is_a_king(): bool {
-        return $this->piece->is_a_king();
-    }
-
     public function exists(): bool {
         return $this->exists;
     }
@@ -61,6 +57,10 @@ abstract class PieceManager {
 
     public function put_back(): void {
         $this->exists = true;
+    }
+
+    public function get_piece_type(): int {
+        return $this->piece->get_piece_type();
     }
 
 }

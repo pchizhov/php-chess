@@ -21,4 +21,8 @@ class Pawn extends ChessPiece {
         return pow(-1, $this->color);
     }
 
+    public function get_piece_type(): int {
+        return PieceEnum::PAWN;
+    }
+
 }

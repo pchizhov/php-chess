@@ -10,4 +10,8 @@ class Queen extends ChessPiece {
                 [1, 1], [1, -1], [-1, 1], [-1, -1]];
     }
 
+    public function get_piece_type(): int {
+        return PieceEnum::QUEEN;
+    }
+
 }

@@ -9,8 +9,7 @@ class King extends ChessPiece {
         return [[0, 1], [1, 0], [-1, 0], [0, -1], [-1, 1], [1, -1], [-1, -1], [1, 1]];
     }
 
-    public function is_a_king(): bool {
-        return true;
+    public function get_piece_type(): int {
+        return PieceEnum::KING;
     }
-
 }

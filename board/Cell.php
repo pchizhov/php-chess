@@ -43,4 +43,17 @@ class Cell {
         return array($this->position[0] + $shift[0], $this->position[1] + $shift[1]);
     }
 
+    public function to_json() {
+        $result = json_decode('{}');
+        if ($this->is_empty()) {
+            $result->empty = true;
+        } else {
+            $result->empty = false;
+            $result->piece = json_decode('{}');
+            $result->piece->piece_type = $this->get_piece()->get_piece_type();
+            $result->piece->color = $this->get_piece()->get_color();
+        }
+        return $result;
+    }
+
 }

@@ -9,4 +9,7 @@ class Bishop extends ChessPiece {
         return [[1, 1], [1, -1], [-1, 1], [-1, -1]];
     }
 
+    public function get_piece_type(): int {
+        return PieceEnum::BISHOP;
+    }
 }

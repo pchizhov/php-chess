@@ -1,5 +1,6 @@
 <?php
 
+require_once 'MoveEnum.php';
 
 abstract class Move {
 
@@ -14,6 +15,18 @@ abstract class Move {
     public abstract function execute(): void;
 
     public abstract function undo(): void;
+
+    public abstract function to_json();
+
+    public abstract function get_type(): int;
+
+    public function get_from(): Cell {
+        return $this->from;
+    }
+
+    public function get_to(): Cell {
+        return $this->to;
+    }
 
     public function threatens_the_king(): bool {
         return false;

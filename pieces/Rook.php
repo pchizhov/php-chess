@@ -9,4 +9,7 @@ class Rook extends ChessPiece {
         return [[1, 0], [-1, 0], [0, 1], [0, -1]];
     }
 
+    public function get_piece_type(): int {
+        return PieceEnum::ROOK;
+    }
 }

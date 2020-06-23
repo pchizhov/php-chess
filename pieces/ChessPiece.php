@@ -13,10 +13,6 @@ abstract class ChessPiece {
 
     abstract function to_move(): array;
 
-    public function is_a_king(): bool {
-        return false;
-    }
-
     public function used(): bool {
         return $this->used;
     }
@@ -24,5 +20,7 @@ abstract class ChessPiece {
     public function get_color(): int {
         return $this->color;
     }
+
+    public abstract function get_piece_type(): int;
 
 }

@@ -32,7 +32,8 @@ class RookManager extends ForwardManager {
             while ($current_cell->neighbour_exists($direction) && $current_cell->is_empty()) {
                 $current_cell = Game::get_board()->get_cell($this->cell->get_neighbour($direction));
             }
-            return ($current_cell->get_piece()->is_a_king() && !$current_cell->get_piece()->used()) ?
+            return ($current_cell->get_piece()->get_piece_type() == PieceEnum::KING &&
+                !$current_cell->get_piece()->used()) ?
                 new Castling(
                     $this->cell, Game::get_board()->get_cell($rook_to),
                     $current_cell, Game::get_board()->get_cell($king_to)
